@@ -2,6 +2,9 @@
 venv/
 .env
 
+# Project notes
+CLAUDE.md
+
 # Database
 *.db
 
