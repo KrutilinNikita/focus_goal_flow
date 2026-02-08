@@ -1,0 +1,24 @@
+# Environment
+venv/
+.env
+
+# Database
+*.db
+
+# Logs
+logs/
+
+# Exports
+*.csv
+*.png
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+
+# IDE
+.idea/
+.vscode/
+*.swp
