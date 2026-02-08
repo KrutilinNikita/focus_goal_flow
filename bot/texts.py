@@ -1,7 +1,9 @@
 # Button texts
 BTN_GOAL_TODAY = "🎯 Цель на сегодня"
 BTN_GOAL_TOMORROW = "🎯 Цель на завтра"
-BTN_STATS = "📊 Статистика"
+
+# Default wish
+DEFAULT_WISH_TEXT = "Без категории"
 BTN_DONE = "✅ Отметить выполненной"
 BTN_UNDONE = "↩ Отметить невыполненной"
 BTN_EDIT = "✏ Изменить"
@@ -54,3 +56,96 @@ MSG_NOT_ADMIN = """🔒 У вас нет доступа к админ-коман
 Ваш ID: <code>{user_id}</code>
 
 Добавьте этот ID в файл <code>admins.txt</code> для получения доступа."""
+
+# Wishes
+BTN_MY_WISHES = "💫 Мои хочу"
+BTN_CREATE_WISH = "➕ Создать новое"
+BTN_OTHER_WISHES = "📋 Остальные"
+BTN_WISH_HISTORY = "📖 История"
+BTN_WISH_EDIT = "✏ Редактировать"
+BTN_WISH_ACTIVATE = "▶️ Активировать"
+BTN_WISH_DEACTIVATE = "⏸ Деактивировать"
+BTN_WISH_ARCHIVE = "📦 В архив"
+BTN_WISH_DELETE = "🗑 Удалить"
+BTN_BACK = "◀️ Назад"
+BTN_NO_WISH = "Без категории"
+
+MSG_WISHES_INTRO = """💫 <b>Мои хочу</b>
+
+"Хочу" — это твои долгосрочные цели или направления. Ежедневные цели можно привязывать к ним.
+
+Максимум 2 активных "хочу"."""
+
+MSG_WISHES_EMPTY = "У тебя пока нет ни одного «хочу». Создай первое!"
+MSG_WISHES_ACTIVE = "💫 <b>Активные хочу:</b>"
+MSG_ENTER_WISH = "Напиши своё «хочу»:"
+MSG_WISH_CREATED = "✅ «Хочу» создано!"
+MSG_WISH_LIMIT = "❌ У тебя уже 2 активных «хочу». Деактивируй или архивируй одно из них."
+MSG_WISH_UPDATED = "✅ «Хочу» обновлено!"
+MSG_WISH_DELETED = "🗑 «Хочу» удалено."
+MSG_WISH_ACTIVATED = "▶️ «Хочу» активировано!"
+MSG_WISH_DEACTIVATED = "⏸ «Хочу» деактивировано."
+MSG_WISH_ARCHIVED = "📦 «Хочу» отправлено в архив."
+
+MSG_WISH_CARD = """💫 <b>{text}</b>
+
+Статус: {status}
+Создано: {created_at}
+Целей выполнено: {goals_count}"""
+
+MSG_SELECT_WISH = "К какому «хочу» относится цель?"
+
+# Reflection
+BTN_WRITE_REFLECTION = "✍️ Написать"
+BTN_SKIP_REFLECTION = "⏭ Пропустить"
+
+MSG_ASK_REFLECTION = "🎉 Цель выполнена!\n\nОпиши результат или мысли (или нажми «Пропустить»):"
+MSG_ENTER_REFLECTION = "Напиши свои мысли:"
+
+# Help
+MSG_HELP = """📖 <b>Основные команды:</b>
+
+/start — Запустить бота
+/wants — Мои хочу (долгосрочные цели)
+/stats — Личная статистика
+/help — Показать эту справку
+
+<b>Кнопки главного меню:</b>
+🎯 Цель на сегодня — Поставить цель на сегодня
+🎯 Цель на завтра — Поставить цель на завтра"""
+
+MSG_HELP_ADMIN = """
+
+<b>Админ-команды:</b>
+/admin_stats — Статистика бота
+/admin_export — Экспорт данных (CSV)
+/admin_metric — График активности"""
+MSG_REFLECTION_SAVED = "✅ Записано!"
+MSG_REFLECTION_SKIPPED = "👌 Хорошо, продолжай в том же духе!"
+
+# History / Diary
+MSG_WISH_HISTORY_EMPTY = "📖 История пуста. Выполняй цели, привязанные к этому «хочу»!"
+MSG_WISH_HISTORY_TITLE = "📖 <b>История: {wish_text}</b>\n"
+MSG_HISTORY_ITEM = """
+📅 {date}
+🎯 {goal_text}
+{reflection}"""
+
+# Families (Paths)
+BTN_PATHS = "🛤 Пути"
+BTN_CREATE_PATH = "➕ Создать путь"
+
+MSG_PATHS_INTRO = """🛤 <b>Пути</b>
+
+Путь — это группа связанных «хочу»."""
+MSG_PATHS_EMPTY = "У тебя пока нет путей."
+MSG_ENTER_PATH_NAME = "Введи название пути:"
+MSG_PATH_CREATED = "✅ Путь создан!"
+MSG_PATH_DELETED = "🗑 Путь удалён."
+MSG_SELECT_PATH = "Выбери путь для этого «хочу»:"
+MSG_NO_PATH = "Без пути"
+
+# Wish statuses display
+WISH_STATUS_ACTIVE = "✅ Активно"
+WISH_STATUS_INACTIVE = "⏸ Неактивно"
+WISH_STATUS_ARCHIVED = "📦 В архиве"

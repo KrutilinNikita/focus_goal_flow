@@ -2,18 +2,20 @@ from datetime import datetime, date
 from .db import get_connection
 
 
-def create_goal(user_id: int, goal_date: date, goal_text: str):
+def create_goal(user_id: int, goal_date: date, goal_text: str, wish_id: int = None, family_id_snapshot: int = None):
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute(
-        """INSERT OR REPLACE INTO goals (user_id, goal_date, goal_text, status, created_at)
-           VALUES (?, ?, ?, 'pending', ?)""",
-        (user_id, goal_date.isoformat(), goal_text, datetime.now())
+        """INSERT OR REPLACE INTO goals (user_id, goal_date, goal_text, status, created_at, wish_id, family_id_snapshot)
+           VALUES (?, ?, ?, 'pending', ?, ?, ?)""",
+        (user_id, goal_date.isoformat(), goal_text, datetime.now(), wish_id, family_id_snapshot)
     )
 
     conn.commit()
+    goal_id = cursor.lastrowid
     conn.close()
+    return goal_id
 
 
 def get_goal_for_date(user_id: int, goal_date: date):
@@ -164,3 +166,27 @@ def close_day(goal_date: date):
 
     conn.commit()
     conn.close()
+
+
+def add_reflection(goal_id: int, reflection_text: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "UPDATE goals SET reflection_text = ? WHERE id = ?",
+        (reflection_text, goal_id)
+    )
+
+    conn.commit()
+    conn.close()
+
+
+def get_goal_by_id(goal_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM goals WHERE id = ?", (goal_id,))
+    goal = cursor.fetchone()
+
+    conn.close()
+    return goal
