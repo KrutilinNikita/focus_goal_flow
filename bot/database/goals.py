@@ -190,3 +190,17 @@ def get_goal_by_id(goal_id: int):
 
     conn.close()
     return goal
+
+
+def get_days_with_completed_goals(user_id: int) -> int:
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT COUNT(*) FROM goals WHERE user_id = ? AND status = 'done'",
+        (user_id,)
+    )
+    count = cursor.fetchone()[0]
+
+    conn.close()
+    return count

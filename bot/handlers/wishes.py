@@ -1,27 +1,32 @@
 import logging
+from datetime import date, datetime, timedelta
 from aiogram import F
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command
+from aiogram.enums import ParseMode
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 from . import router
+from .goals import format_goal_card, format_date_ru, get_time_until_midnight, escape_md
 from database import (
     create_wish, get_active_wishes, get_all_wishes, get_wish,
     update_wish_status, update_wish_text, delete_wish,
-    count_active_wishes, get_goals_by_wish
+    count_active_wishes, get_goals_by_wish, get_goal_for_date
 )
 from keyboards.wishes import (
     wishes_menu_kb, wish_actions_kb, all_wishes_kb, back_to_wishes_kb
 )
-from keyboards import main_menu_kb
+from keyboards import main_menu_kb, goal_actions_kb, set_goal_kb, goal_completed_kb
 from texts import (
-    MSG_WISHES_INTRO, MSG_WISHES_EMPTY, MSG_WISHES_ACTIVE,
+    MSG_WISHES_INTRO, MSG_WISHES_EMPTY, MSG_WISHES_ACTIVE, MSG_WISHES_CTA,
     MSG_ENTER_WISH, MSG_WISH_CREATED, MSG_WISH_LIMIT,
     MSG_WISH_UPDATED, MSG_WISH_DELETED, MSG_WISH_CARD,
     MSG_WISH_ACTIVATED, MSG_WISH_DEACTIVATED, MSG_WISH_ARCHIVED,
     MSG_WISH_HISTORY_EMPTY, MSG_WISH_HISTORY_TITLE, MSG_HISTORY_ITEM,
-    WISH_STATUS_ACTIVE, WISH_STATUS_INACTIVE, WISH_STATUS_ARCHIVED
+    WISH_STATUS_ACTIVE, WISH_STATUS_INACTIVE, WISH_STATUS_ARCHIVED,
+    MSG_GOAL_CARD_TODAY, MSG_GOAL_CARD_TODAY_EMPTY, MSG_GOAL_CARD_TODAY_DONE,
+    STATUS_PENDING, STATUS_DONE, STATUS_FAILED
 )
 
 logger = logging.getLogger(__name__)
@@ -65,6 +70,8 @@ async def cmd_wants(message: Message):
     else:
         text += MSG_WISHES_EMPTY
 
+    text += MSG_WISHES_CTA
+
     await message.answer(text, reply_markup=wishes_menu_kb(active_wishes))
 
 
@@ -80,6 +87,8 @@ async def wishes_menu(callback: CallbackQuery):
             text += f"\n• {wish[2]}"
     else:
         text += MSG_WISHES_EMPTY
+
+    text += MSG_WISHES_CTA
 
     await callback.message.edit_text(text, reply_markup=wishes_menu_kb(active_wishes))
     await callback.answer()
@@ -109,6 +118,7 @@ async def save_wish(message: Message, state: FSMContext):
     text = MSG_WISHES_INTRO + "\n\n" + MSG_WISHES_ACTIVE
     for wish in active_wishes:
         text += f"\n• {wish[2]}"
+    text += MSG_WISHES_CTA
 
     await message.answer(text, reply_markup=wishes_menu_kb(active_wishes))
 
@@ -235,6 +245,7 @@ async def delete_wish_handler(callback: CallbackQuery):
             text += f"\n• {wish[2]}"
     else:
         text += MSG_WISHES_EMPTY
+    text += MSG_WISHES_CTA
 
     await callback.message.edit_text(text, reply_markup=wishes_menu_kb(active_wishes))
 
@@ -242,7 +253,33 @@ async def delete_wish_handler(callback: CallbackQuery):
 @router.callback_query(F.data == "back_to_main")
 async def back_to_main(callback: CallbackQuery):
     await callback.message.delete()
-    await callback.message.answer("🎯 Главное меню", reply_markup=main_menu_kb())
+
+    today = date.today()
+    goal = get_goal_for_date(callback.from_user.id, today)
+
+    if goal:
+        if goal[4] == "done":
+            # Show completed goal
+            await callback.message.answer(
+                format_goal_card(goal, is_today=True, use_done_template=True),
+                reply_markup=goal_completed_kb(),
+                parse_mode=ParseMode.MARKDOWN_V2
+            )
+        else:
+            # Show pending goal
+            await callback.message.answer(
+                format_goal_card(goal, is_today=True),
+                reply_markup=goal_actions_kb(goal[0]),
+                parse_mode=ParseMode.MARKDOWN_V2
+            )
+    else:
+        # No goal - show empty card
+        empty_card = MSG_GOAL_CARD_TODAY_EMPTY.format(
+            date=escape_md(format_date_ru(today)),
+            time_left=get_time_until_midnight()
+        )
+        await callback.message.answer(empty_card, reply_markup=set_goal_kb(), parse_mode=ParseMode.MARKDOWN_V2)
+
     await callback.answer()
 
 

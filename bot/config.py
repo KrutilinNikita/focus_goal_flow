@@ -18,7 +18,7 @@ BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 TIMEZONE = os.getenv("TIMEZONE", "Europe/Moscow")
 
 # Reminder times (HH:MM)
-REMINDER_TIMES = ["09:00", "13:00", "17:00", "21:00", "23:59"]
+REMINDER_TIMES = ["09:00", "12:00", "17:00", "19:00", "21:00", "23:00"]
 
 # Goal edit deadline (hours after midnight)
 GOAL_EDIT_DEADLINE_HOUR = 3

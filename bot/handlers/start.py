@@ -1,5 +1,6 @@
 from aiogram import F
-from aiogram.types import Message
+from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart, Command
 
 from . import router
@@ -7,7 +8,13 @@ from database import get_or_create_user, create_wish
 from database.wishes import get_all_wishes
 from keyboards import main_menu_kb
 from config import ADMINS_FILE
-from texts import MSG_WELCOME, MSG_HELP, MSG_HELP_ADMIN, DEFAULT_WISH_TEXT
+from texts import MSG_WELCOME, MSG_WELCOME_EMOJI, MSG_HELP, MSG_HELP_ADMIN, DEFAULT_WISH_TEXT
+
+
+def welcome_kb():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🎯 Цель на сегодня", callback_data="goal_today")]
+    ])
 
 
 def is_admin(user_id: int) -> bool:
@@ -37,7 +44,10 @@ async def cmd_start(message: Message):
     # Ensure default wish exists
     ensure_default_wish(message.from_user.id)
 
-    await message.answer(MSG_WELCOME, reply_markup=main_menu_kb())
+    # Send greeting emoji
+    await message.answer(MSG_WELCOME_EMOJI, reply_markup=main_menu_kb())
+    # Send welcome message with MarkdownV2 formatting and inline button
+    await message.answer(MSG_WELCOME, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=welcome_kb())
 
 
 @router.message(Command("help"))

@@ -95,11 +95,12 @@ def delete_wish(wish_id: int):
 
 
 def count_active_wishes(user_id: int) -> int:
+    """Count active wishes excluding 'Без категории'"""
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT COUNT(*) FROM wishes WHERE user_id = ? AND status = 'active'",
+        "SELECT COUNT(*) FROM wishes WHERE user_id = ? AND status = 'active' AND text != 'Без категории'",
         (user_id,)
     )
     count = cursor.fetchone()[0]

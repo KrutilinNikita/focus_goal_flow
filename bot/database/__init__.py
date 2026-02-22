@@ -8,7 +8,8 @@ from .goals import (
     update_goal_text,
     delete_goal,
     get_user_stats,
-    add_reflection
+    add_reflection,
+    get_days_with_completed_goals
 )
 from .wishes import (
     create_wish,
